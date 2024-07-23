@@ -26,8 +26,8 @@ function main() {
     process.exit(1);
   }
 
-  const DOMAIN = args[0];
-  const SUBDOMAINS = [
+  const domain = args[0];
+  const subdomains = [
     'accounts',
     'clerk',
     'clk._domainkey',
@@ -35,45 +35,45 @@ function main() {
     'clkmail',
   ];
 
-  getRecords('A', DOMAIN);
-  getRecords('AAAA', DOMAIN);
-  getRecords('MX', DOMAIN);
-  getRecords('NS', DOMAIN);
-  getRecords('TXT', DOMAIN);
-  getRecords('SOA', DOMAIN);
+  getRecords('A', domain);
+  getRecords('AAAA', domain);
+  getRecords('MX', domain);
+  getRecords('NS', domain);
+  getRecords('TXT', domain);
+  getRecords('SOA', domain);
 
   console.log(
-    chalk.bold.blue(`Starting checks for CNAME records for ${DOMAIN} \n`)
+    chalk.bold.blue(`Starting checks for CNAME records for ${domain} \n`)
   );
-  SUBDOMAINS.forEach((SUB) => {
-    console.log(chalk.bold.blue(`Checking CNAME record for ${SUB}.${DOMAIN}`));
+  subdomains.forEach((sub) => {
+    console.log(chalk.bold.blue(`Checking CNAME record for ${sub}.${domain}`));
     try {
       const cnameResult = execSync(
-        `dig +noall +answer ${SUB}.${DOMAIN} CNAME`
+        `dig +noall +answer ${sub}.${domain} CNAME`
       ).toString();
       if (cnameResult.trim() === '') {
-        console.log(chalk.red(`No CNAME record found for ${SUB}.${DOMAIN}.`));
+        console.log(chalk.red(`No CNAME record found for ${sub}.${domain}.`));
       } else {
         console.log(chalk.green(cnameResult));
       }
     } catch (err) {
       console.error(
-        chalk.red(`Error checking CNAME record for ${SUB}.${DOMAIN}: ${err}`)
+        chalk.red(`Error checking CNAME record for ${sub}.${domain}: ${err}`)
       );
     }
   });
 
-  console.log(chalk.bold.blue(`Trace path packets for ${DOMAIN}`));
+  console.log(chalk.bold.blue(`Trace path packets for ${domain}`));
   try {
-    const traceResult = execSync(`dig +trace ${DOMAIN}`).toString();
+    const traceResult = execSync(`dig +trace ${domain}`).toString();
     console.log(chalk.green(traceResult));
   } catch (err) {
     console.error(chalk.red(`Error tracing path packets: ${err}`));
   }
 
-  console.log(chalk.bold.blue(`DNSSEC security extensions for ${DOMAIN}`));
+  console.log(chalk.bold.blue(`DNSSEC security extensions for ${domain}`));
   try {
-    const dnssecResult = execSync(`dig +dnssec ${DOMAIN}`).toString();
+    const dnssecResult = execSync(`dig +dnssec ${domain}`).toString();
     console.log(chalk.green(dnssecResult));
   } catch (err) {
     console.error(chalk.red(`Error with DNSSEC security extensions: ${err}`));
@@ -84,7 +84,7 @@ function main() {
     const sslResult = execSync(
       // 2>/dev/null -> dumps stdout to /dev/null
       // grep -E '^(depth|verify|subject|issuer)' -> only show depth, verify, subject, issuer and no keys
-      `openssl s_client -servername ${DOMAIN} -connect ${DOMAIN}:443 2>/dev/null | grep -E '^(depth|verify|subject|issuer)'`
+      `openssl s_client -servername ${domain} -connect ${domain}:443 2>/dev/null | grep -E '^(depth|verify|subject|issuer)'`
     );
     console.log(chalk.green(sslResult));
   } catch (error) {
