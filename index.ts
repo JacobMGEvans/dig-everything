@@ -84,7 +84,7 @@ function main() {
     const sslResult = execSync(
       // 2>/dev/null -> dumps errors to /dev/null
       // grep -E '^(depth|verify|subject|issuer)' -> only show depth, verify, subject, issuer and no keys
-      `echo | openssl s_client -servername ${DOMAIN} -connect ${DOMAIN}:443 2>/dev/null | grep -E '^(depth|verify|subject|issuer)'`
+      `openssl s_client -servername ${DOMAIN} -connect ${DOMAIN}:443 2>/dev/null | grep -E '^(depth|verify|subject|issuer)'`
     );
     console.log(chalk.green(sslResult));
   } catch (error) {
