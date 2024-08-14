@@ -52,7 +52,7 @@ function main() {
         `dig +noall +answer ${sub}.${domain} CNAME`
       ).toString();
       if (cnameResult.trim() === '') {
-        console.log(chalk.red(`No CNAME record found for ${sub}.${domain}.`));
+        console.log(chalk.red(`No CNAME record found for ${sub}.${domain}`));
       } else {
         console.log(chalk.green(cnameResult));
       }
