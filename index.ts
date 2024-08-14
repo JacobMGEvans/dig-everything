@@ -6,7 +6,7 @@ function getRecords(type: string, domain: string) {
   try {
     const result = execSync(`dig +noall +answer ${domain} ${type}`).toString();
     if (result.trim() === '') {
-      console.log(chalk.red(`No ${type} records found for ${domain}.`));
+      console.log(chalk.red(`No ${type} records found for ${domain}`));
     } else {
       console.log(chalk.green(result));
     }
