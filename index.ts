@@ -41,6 +41,7 @@ function main() {
   getRecords('NS', domain);
   getRecords('TXT', domain);
   getRecords('SOA', domain);
+  getRecords('CAA', domain);
 
   console.log(
     chalk.bold.blue(`Starting checks for CNAME records for ${domain} \n`)
