@@ -67,14 +67,6 @@ function getWhois(domain: string) {
   logResult(`WHOIS information for ${domain}`, result);
 }
 
-function checkDNSPropagation(domain: string, type: string = 'A') {
-  console.log(
-    chalk.bold.blue(`Checking DNS propagation for ${domain} (${type} record)`)
-  );
-  const result = executeCommand(`dig @resolver1.opendns.com ${domain} ${type}`);
-  logResult(`DNS propagation for ${domain}`, result);
-}
-
 function checkSPF(domain: string) {
   console.log(chalk.bold.blue(`Checking SPF record for ${domain}`));
   const result = executeCommand(`dig +short ${domain} TXT | grep "v=spf1"`);
@@ -142,7 +134,6 @@ function main() {
   // Additional Tools
   // getReverseDNS('8.8.8.8'); // Replace with the IP address of interest
   getWhois(domain);
-  checkDNSPropagation(domain);
   checkSPF(domain);
   checkDKIM(domain);
   // checkOpenPorts(domain, [80, 443]);
