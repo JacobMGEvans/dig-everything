@@ -73,17 +73,6 @@ function checkSPF(domain: string) {
   logResult(`SPF record for ${domain}`, result);
 }
 
-function checkDKIM(
-  domain: string,
-  selectors: string[] = ['default', 'selector1', 'selector2']
-) {
-  console.log(chalk.bold.blue(`Checking DKIM records for ${domain}`));
-  selectors.forEach((selector) => {
-    const result = executeCommand(`dig ${selector}._domainkey.${domain} TXT`);
-    logResult(`DKIM record for ${selector}._domainkey.${domain}`, result);
-  });
-}
-
 // function checkOpenPorts(domain: string, ports: number[]) {
 //   console.log(chalk.bold.blue(`Checking open ports for ${domain}`));
 //   ports.forEach((port) => {
@@ -135,7 +124,6 @@ function main() {
   // getReverseDNS('8.8.8.8'); // Replace with the IP address of interest
   getWhois(domain);
   checkSPF(domain);
-  checkDKIM(domain);
   // checkOpenPorts(domain, [80, 443]);
 
   console.log(chalk.bold.greenBright('Completed!'));
