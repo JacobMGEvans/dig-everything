@@ -27,16 +27,25 @@ function getDNSRecords(type: string, domain: string) {
 function checkCNAMERecords(domain: string, subdomains: string[]) {
   console.log(chalk.bold.blue(`Checking CNAME records for ${domain}`));
   subdomains.forEach((sub) => {
-    console.log(chalk.bold.blue(`Checking CNAME record for ${sub}.${domain}`));
+    console.log(chalk.bold.blue(`CNAME record for ${sub}.${domain}`));
     const result = executeCommand(`dig +noall +answer ${sub}.${domain} CNAME`);
     logResult(`CNAME record for ${sub}.${domain}`, result);
   });
 }
 
 function traceDNSPath(domain: string) {
-  console.log(chalk.bold.blue(`Tracing path packets for ${domain}`));
-  const result = executeCommand(`dig +trace ${domain}`);
-  logResult(`Trace path packets for ${domain}`, result);
+  console.log(chalk.bold.blue(`Tracing DNS path for ${domain}`));
+
+  const result = execSync(`dig +trace ${domain}`).toString();
+  const summary = result
+    .split('\n')
+    .filter((line) =>
+      line.match(/^\..*IN\s+NS|com\..*IN\s+NS|jacobmgevans\.com\..*IN\s+(NS|A)/)
+    )
+    .map((line) => line.trim())
+    .join('\n');
+
+  logResult(`Trace summary for ${domain}`, summary);
 }
 
 function checkDNSSEC(domain: string) {
@@ -63,7 +72,9 @@ function getSSLInfo(domain: string) {
 
 function getWhois(domain: string) {
   console.log(chalk.bold.blue(`Getting WHOIS information for ${domain}`));
-  const result = executeCommand(`whois ${domain}`);
+  const result =
+    executeCommand(`whois ${domain} | grep -E 'Domain Name:|Registrar:|Creation Date:|Expiration Date:'
+`);
   logResult(`WHOIS information for ${domain}`, result);
 }
 
@@ -85,7 +96,7 @@ function main() {
   const args = process.argv.slice(2);
   if (args.length === 0) {
     console.log(
-      chalk.yellow(
+      chalk.bold.red(
         `Argument missing. Use this format: ${process.argv[1]} <domain>`
       )
     );
@@ -93,13 +104,6 @@ function main() {
   }
 
   const domain = args[0];
-  const subdomains = [
-    'accounts',
-    'clerk',
-    'clk._domainkey',
-    'clk2._domainkey',
-    'clkmail',
-  ];
 
   // DNS Records
   getDNSRecords('A', domain);
@@ -111,7 +115,11 @@ function main() {
   getDNSRecords('CAA', domain);
 
   // CNAME Records
-  checkCNAMERecords(domain, subdomains);
+  process.env.subdomains &&
+    checkCNAMERecords(
+      domain,
+      JSON.parse(process.env.subdomains) satisfies string[]
+    );
 
   // Trace and DNSSEC
   traceDNSPath(domain);
