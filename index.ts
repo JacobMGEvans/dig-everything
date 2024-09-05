@@ -40,7 +40,7 @@ function traceDNSPath(domain: string) {
   const summary = result
     .split('\n')
     .filter((line) =>
-      line.match(/^\..*IN\s+NS|com\..*IN\s+NS|jacobmgevans\.com\..*IN\s+(NS|A)/)
+      line.match(/^\..*IN\s+NS|com\..*IN\s+NS|.*\.com\..*IN\s+(NS|A)/)
     )
     .map((line) => line.trim())
     .join('\n');
