@@ -30,7 +30,7 @@ function checkCNAMERecords(domain: string, subdomains: string[]) {
     console.log(chalk.bold.blue(`CNAME record for ${sub}.${domain}`));
     const result = executeCommand(`dig +noall +answer ${sub}.${domain} CNAME`);
     logResult(`CNAME record for ${sub}.${domain}`, result);
-    if (['clk._domainkey', 'clerk', 'accounts'].includes(sub)) {
+    if (['clerk', 'accounts'].includes(sub)) {
       // Check SSL certificate for each CNAME record
       logResult(
         `SSL certificate for ${sub}.${domain}`,
