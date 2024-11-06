@@ -30,6 +30,13 @@ function checkCNAMERecords(domain: string, subdomains: string[]) {
     console.log(chalk.bold.blue(`CNAME record for ${sub}.${domain}`));
     const result = executeCommand(`dig +noall +answer ${sub}.${domain} CNAME`);
     logResult(`CNAME record for ${sub}.${domain}`, result);
+    if (['clk._domainkey', 'clerk', 'accounts'].includes(sub)) {
+      // Check SSL certificate for each CNAME record
+      logResult(
+        `SSL certificate for ${sub}.${domain}`,
+        getSSLInfo(`${sub}.${domain}`)
+      );
+    }
   });
 }
 
@@ -52,7 +59,7 @@ function checkDNSSEC(domain: string) {
   console.log(
     chalk.bold.blue(`Checking DNSSEC security extensions for ${domain}`)
   );
-  const result = executeCommand(`dig +dnssec ${domain}`);
+  const result = executeCommand(`dig +dnssec +short ${domain}`);
   logResult(`DNSSEC security extensions for ${domain}`, result);
 }
 
@@ -61,7 +68,8 @@ function getSSLInfo(domain: string) {
   const result = executeCommand(
     `openssl s_client -servername ${domain} -connect ${domain}:443 2>/dev/null | grep -E '^(depth|verify|subject|issuer)'`
   );
-  logResult('SSL/TLS certificate information', result);
+  if (result.includes('Error executing command:')) return '';
+  return result;
 }
 
 // function getReverseDNS(ip: string) {
@@ -72,9 +80,8 @@ function getSSLInfo(domain: string) {
 
 function getWhois(domain: string) {
   console.log(chalk.bold.blue(`Getting WHOIS information for ${domain}`));
-  const result =
-    executeCommand(`whois ${domain} | grep -E 'Domain Name:|Registrar:|Creation Date:|Expiration Date:'
-`);
+  // GREP is not working
+  const result = executeCommand(`whois ${domain}`);
   logResult(`WHOIS information for ${domain}`, result);
 }
 
@@ -92,6 +99,13 @@ function checkSPF(domain: string) {
 //   });
 // }
 
+function checkDomainKeys(domain: string) {
+  console.log(chalk.bold.blue(`Checking Publishable Keys for ${domain}`));
+  const result = executeCommand(`curl -v ${domain} | grep pk_live_`);
+  console.log(result);
+  // return atob(result.split('_')[2]);
+}
+
 function main() {
   const args = process.argv.slice(2);
   if (args.length === 0) {
@@ -104,6 +118,9 @@ function main() {
   }
 
   const domain = args[0];
+
+  // Check for Keys in Domain
+  checkDomainKeys(domain);
 
   // DNS Records
   getDNSRecords('A', domain);
@@ -126,7 +143,7 @@ function main() {
   checkDNSSEC(domain);
 
   // SSL/TLS Info
-  getSSLInfo(domain);
+  logResult('SSL/TLS certificate information', getSSLInfo(domain));
 
   // Additional Tools
   // getReverseDNS('8.8.8.8'); // Replace with the IP address of interest
