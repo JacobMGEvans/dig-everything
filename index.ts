@@ -21,6 +21,7 @@ function logResult(description: string, result: string) {
 function getDNSRecords(type: string, domain: string) {
   console.log(chalk.bold.blue(`Getting ${type} records for ${domain}`));
   const result = executeCommand(`dig +noall +answer ${domain} ${type}`);
+
   logResult(`${type} records for ${domain}`, result);
 }
 
@@ -64,7 +65,9 @@ function checkDNSSEC(domain: string) {
 }
 
 function getSSLInfo(domain: string) {
-  console.log(chalk.bold.blue('Retrieving SSL/TLS Certificate Information:'));
+  console.log(
+    chalk.bold.blue(`Retrieving SSL/TLS Certificate Information for ${domain}:`)
+  );
   const result = executeCommand(
     `openssl s_client -servername ${domain} -connect ${domain}:443 2>/dev/null | grep -E '^(depth|verify|subject|issuer)'`
   );
@@ -72,11 +75,11 @@ function getSSLInfo(domain: string) {
   return result;
 }
 
-// function getReverseDNS(ip: string) {
-//   console.log(chalk.bold.blue(`Performing reverse DNS lookup for ${ip}`));
-//   const result = executeCommand(`dig +noall +answer -x ${ip}`);
-//   logResult(`Reverse DNS records for ${ip}`, result);
-// }
+function getReverseDNS(ip: string) {
+  console.log(chalk.bold.blue(`Performing reverse DNS lookup for ${ip}`));
+  const result = executeCommand(`dig +noall +answer -x ${ip}`);
+  logResult(`Reverse DNS records for ${ip}`, result);
+}
 
 function getWhois(domain: string) {
   console.log(chalk.bold.blue(`Getting WHOIS information for ${domain}`));
