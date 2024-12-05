@@ -9,7 +9,7 @@ interface SPFRecordProps {
 }
 
 const SPFRecord: React.FC<SPFRecordProps> = ({ domain }) => {
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     const spinner = ora(`Checking SPF record for ${domain}`).start();
     const result = executeCommand(`dig +short ${domain} TXT | grep "v=spf1"`);
     spinner.succeed(`Checked SPF record for ${domain}`);

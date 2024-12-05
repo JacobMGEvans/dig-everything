@@ -9,12 +9,12 @@ interface CheckDNSSECProps {
 }
 
 const CheckDNSSEC: React.FC<CheckDNSSECProps> = ({ domain }) => {
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     const spinner = ora(`Checking DNSSEC for ${domain}`).start();
     const result = executeCommand(`dig +dnssec +short ${domain}`);
     spinner.succeed(`Checked DNSSEC for ${domain}`);
     logResult(`DNSSEC security extensions for ${domain}`, result);
-  }, [domain]);
+  }, []);
 
   return (
     <Box marginBottom={1}>

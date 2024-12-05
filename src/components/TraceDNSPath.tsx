@@ -9,7 +9,7 @@ interface TraceDNSPathProps {
 }
 
 const TraceDNSPath: React.FC<TraceDNSPathProps> = ({ domain }) => {
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     const spinner = ora(`Tracing DNS path for ${domain}`).start();
     const result = executeCommand(`dig +trace ${domain}`);
     spinner.succeed(`Traced DNS path for ${domain}`);

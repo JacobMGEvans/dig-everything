@@ -1,9 +1,28 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Box, Text } from 'ink';
-import Table from 'ink-table';
-import { executeCommand } from '../utils/executeCommand';
-import { logResult } from '../utils/logger';
+import dns from 'node:dns/promises';
 import ora from 'ora';
+import SSLInfo from './SSLInfo';
+
+export const padString = (
+  str: string | JSX.Element,
+  length: number,
+  align: 'left' | 'right' = 'left'
+) => {
+  // check if the str is a JSX.Element and return it directly
+  if (typeof str === 'object' && typeof str !== 'string') {
+    return str;
+  }
+
+  if (str.length > length) {
+    return align === 'left'
+      ? str.slice(0, length - 3) + '...'
+      : '...' + str.slice(-length + 3);
+  }
+
+  const padding = ' '.repeat(length - str.length);
+  return align === 'left' ? str + padding : padding + str;
+};
 
 interface CNAMERecordsProps {
   domain: string;
@@ -12,18 +31,23 @@ interface CNAMERecordsProps {
 
 // Add an index signature to allow dynamic keys
 interface TableRow {
-  [key: string]: string;
   Subdomain: string;
   'CNAME Record': string;
-  'SSL Info': string;
+  'SSL Info': string | JSX.Element;
 }
 
-const CNAMERecords: React.FC<CNAMERecordsProps> = ({ domain, subdomains }) => {
-  const [tableData, setTableData] = useState<TableRow[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+const COLUMN_WIDTHS = {
+  subdomain: 20,
+  cname: 50,
+  ssl: 50,
+};
 
-  useEffect(() => {
+const CNAMERecords: React.FC<CNAMERecordsProps> = ({ domain, subdomains }) => {
+  const [tableData, setTableData] = React.useState<TableRow[]>([]);
+  const [loading, setLoading] = React.useState<boolean>(true);
+  const [error, setError] = React.useState<string | null>(null);
+
+  React.useLayoutEffect(() => {
     const fetchRecords = async () => {
       const spinner = ora(
         `Checking CNAME and SSL records for ${domain}`
@@ -35,20 +59,22 @@ const CNAMERecords: React.FC<CNAMERecordsProps> = ({ domain, subdomains }) => {
         for (const sub of subdomains) {
           const fqdn = `${sub}.${domain}`;
 
-          // Fetch CNAME Record
-          const cnameCommand = `dig +noall +answer ${fqdn} CNAME`;
-          const cnameResult = await executeCommand(cnameCommand);
-          logResult(`CNAME record for ${fqdn}`, cnameResult);
-          const cname = cnameResult.trim() || 'N/A';
-
-          // Fetch SSL Info if applicable
-          let ssl = 'N/A';
-          if (['clerk', 'accounts'].includes(sub)) {
-            const sslCommand = `openssl s_client -servername ${fqdn} -connect ${fqdn}:443 2>/dev/null | grep -E '^(depth|verify|subject|issuer)'`;
-            const sslResult = await executeCommand(sslCommand);
-            logResult(`SSL certificate for ${fqdn}`, sslResult);
-            ssl = sslResult.trim() || 'N/A';
+          // Fetch CNAME Record using Node.js DNS API
+          let cname = 'N/A';
+          try {
+            cname = (await dns.resolveCname(fqdn)).join('\n');
+          } catch {
+            cname = 'No CNAME Record';
           }
+
+          // Simulate SSL Info (can be replaced with a proper function)
+          const ssl = ['clerk', 'accounts'].includes(sub) ? (
+            <>
+              <SSLInfo domain={fqdn} />
+            </>
+          ) : (
+            'N/A'
+          );
 
           data.push({
             Subdomain: sub,
@@ -91,19 +117,34 @@ const CNAMERecords: React.FC<CNAMERecordsProps> = ({ domain, subdomains }) => {
 
   return (
     <Box flexDirection="column">
-      <Box marginBottom={1}>
-        <Text bold>CNAME and SSL Information for {domain}</Text>
+      <Text bold color="blue">
+        CNAME Records for {domain}
+      </Text>
+      <Box>
+        <Text bold>
+          {padString('Subdomain', COLUMN_WIDTHS.subdomain)} |{' '}
+          {padString('CNAME Record', COLUMN_WIDTHS.cname)} |{' '}
+          {padString('SSL Info', COLUMN_WIDTHS.ssl)}
+        </Text>
       </Box>
-      <Table
-        data={tableData}
-        // Optional: Customize table styles if needed
-        // Example of adding column headers with specific alignment
-        // columns={[
-        //   { key: 'Subdomain', header: 'Subdomain', alignment: 'left' },
-        //   { key: 'CNAME Record', header: 'CNAME Record', alignment: 'left' },
-        //   { key: 'SSL Info', header: 'SSL Info', alignment: 'left' },
-        // ]}
-      />
+      {/* Divider */}
+      <Box>
+        <Text>
+          {''.padEnd(COLUMN_WIDTHS.subdomain, '-')} +{'-'.repeat(3)}{' '}
+          {''.padEnd(COLUMN_WIDTHS.cname, '-')} +{'-'.repeat(3)}{' '}
+          {''.padEnd(COLUMN_WIDTHS.ssl, '-')}
+        </Text>
+      </Box>
+      {/* Table Rows */}
+      {tableData.map((row, index) => (
+        <Box key={index}>
+          <Text>
+            {padString(row.Subdomain, COLUMN_WIDTHS.subdomain)} |{' '}
+            {padString(row['CNAME Record'], COLUMN_WIDTHS.cname)} |{' '}
+            {padString(row['SSL Info'], COLUMN_WIDTHS.ssl)}
+          </Text>
+        </Box>
+      ))}
     </Box>
   );
 };

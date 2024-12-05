@@ -17,6 +17,12 @@ export const subdomains = [
   'clk2._domainkey',
   'clkmail',
 ];
+export const COLUMN_WIDTHS = {
+  titleRow: 20,
+  row1: 50,
+  row2: 50,
+};
+
 const App: React.FC = () => {
   const { exit } = useApp();
   const [domain, setDomain] = useState<string>('');
@@ -56,34 +62,16 @@ const App: React.FC = () => {
         Dig Everything CLI
       </Text>
 
-      {/* Domain Keys */}
-      <DomainKeys domain={domain} />
-
-      {/* DNS Records */}
-      {['A', 'AAAA', 'MX', 'NS', 'TXT', 'SOA', 'CAA'].map((type) => (
-        <DNSRecords key={type} type={type} domain={domain} />
+      {['A', 'AAAA', 'MX', 'NS', 'TXT', 'SOA', 'CAA'].map((recordType) => (
+        <DNSRecords key={recordType} recordType={recordType} domain={domain} />
       ))}
-
-      {/* CNAME Records */}
-      {subdomains.length > 0 && (
-        <CNAMERecords domain={domain} subdomains={subdomains} />
-      )}
-
-      {/* Trace DNS Path */}
-      <TraceDNSPath domain={domain} />
-
-      {/* Check DNSSEC */}
+      {<CNAMERecords domain={domain} subdomains={subdomains} />}
+      {/* <DomainKeys domain={domain} /> 
+       <TraceDNSPath domain={domain} />
       <CheckDNSSEC domain={domain} />
-
-      {/* SSL/TLS Info */}
       <SSLInfo domain={domain} />
-
-      {/* WHOIS Information */}
       <WhoisInfo domain={domain} />
-
-      {/* SPF Record */}
-      <SPFRecord domain={domain} />
-
+      <SPFRecord domain={domain} /> */}
       <Box marginTop={1}>
         <Text bold color="greenBright">
           Completed!

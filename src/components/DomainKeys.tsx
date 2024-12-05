@@ -1,6 +1,5 @@
 import React from 'react';
 import { Box, Text } from 'ink';
-import { executeCommand } from '../utils/executeCommand';
 import ora from 'ora';
 
 interface DomainKeysProps {
@@ -8,9 +7,15 @@ interface DomainKeysProps {
 }
 
 const DomainKeys: React.FC<DomainKeysProps> = ({ domain }) => {
-  React.useEffect(() => {
+  const [result, setResult] = React.useState<string>('');
+
+  React.useLayoutEffect(() => {
     const spinner = ora(`Checking publishable keys for ${domain}`).start();
-    const result = executeCommand(`curl -v ${domain} | grep pk_live_`);
+    (async () => {
+      const result = await fetch(`https://${domain}`);
+      setResult(await result.text());
+    })();
+
     if (result) {
       spinner.succeed(`Checked publishable keys for ${domain}`);
     } else {
