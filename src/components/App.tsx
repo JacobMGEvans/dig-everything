@@ -2,12 +2,12 @@ import React, { useState, useCallback } from 'react';
 import { Box, Text, useApp, useInput } from 'ink';
 import DNSRecords from './DNSRecords';
 import CNAMERecords from './CNAMERecords';
-import TraceDNSPath from './TraceDNSPath';
-import CheckDNSSEC from './CheckDNSSEC';
-import SSLInfo from './SSLInfo';
-import WhoisInfo from './WhoIsInfo';
-import SPFRecord from './SPFRecords';
-import DomainKeys from './DomainKeys';
+// import TraceDNSPath from './TraceDNSPath';
+// import CheckDNSSEC from './CheckDNSSEC';
+// import SSLInfo from './SSLInfo';
+// import WhoisInfo from './WhoIsInfo';
+// import SPFRecord from './SPFRecords';
+// import DomainKeys from './DomainKeys';
 import enquirer from 'enquirer';
 
 export const subdomains = [

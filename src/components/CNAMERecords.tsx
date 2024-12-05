@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { JSX } from 'react';
 import { Box, Text } from 'ink';
 import dns from 'node:dns/promises';
 import ora from 'ora';
