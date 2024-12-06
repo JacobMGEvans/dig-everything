@@ -2,12 +2,13 @@
   "name": "dig-everything",
   "version": "0.0.1",
   "bin": {
-    "your-cli": "./dist/index.js"
+    "dig-everything": "./dist/index.js"
   },
   "scripts": {
     "start": "bun src/index.tsx",
-    "build": "bun build src/index.tsx --outdir dist --bundle --target node --minify",
-    "prod": "bun run build && bun dist/index.js"
+    "postbuild": "cp node_modules/yoga-wasm-web/dist/yoga.wasm dist",
+    "build": "bun run ./build.ts && bun run postbuild",
+    "prod": "bun run build && bun ./dist/index.js"
   },
   "devDependencies": {
     "@types/node": "^22.10.1",

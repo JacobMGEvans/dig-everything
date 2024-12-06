@@ -39,7 +39,7 @@ interface TableRow {
 const COLUMN_WIDTHS = {
   subdomain: 20,
   cname: 50,
-  ssl: 50,
+  ssl: 60,
 };
 
 const CNAMERecords: React.FC<CNAMERecordsProps> = ({ domain, subdomains }) => {
@@ -141,7 +141,7 @@ const CNAMERecords: React.FC<CNAMERecordsProps> = ({ domain, subdomains }) => {
           <Text>
             {padString(row.Subdomain, COLUMN_WIDTHS.subdomain)} |{' '}
             {padString(row['CNAME Record'], COLUMN_WIDTHS.cname)} |{' '}
-            {padString(row['SSL Info'], COLUMN_WIDTHS.ssl)}
+            {padString(row['SSL Info'], COLUMN_WIDTHS.ssl, 'right')}
           </Text>
         </Box>
       ))}
