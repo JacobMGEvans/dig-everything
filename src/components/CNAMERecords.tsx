@@ -9,7 +9,7 @@ export const padString = (
   length: number,
   align: 'left' | 'right' = 'left'
 ) => {
-  // check if the str is a JSX.Element and return it directly
+  // Check if the str is a JSX.Element and return it directly
   if (typeof str === 'object' && typeof str !== 'string') {
     return str;
   }
@@ -62,16 +62,20 @@ const CNAMERecords: React.FC<CNAMERecordsProps> = ({ domain, subdomains }) => {
           // Fetch CNAME Record using Node.js DNS API
           let cname = 'N/A';
           try {
-            cname = (await dns.resolveCname(fqdn)).join('\n');
+            const cnameRecords = await dns.resolveCname(fqdn);
+            cname = cnameRecords.join(', '); // Join with comma for single-line
           } catch {
             cname = 'No CNAME Record';
           }
 
           // Simulate SSL Info (can be replaced with a proper function)
           const ssl = ['clerk', 'accounts'].includes(sub) ? (
-            <>
-              <SSLInfo domain={fqdn} />
-            </>
+            <Box flexDirection="column">
+              <Text>Subject: accounts.clerk.com</Text>
+              <Text>Issuer: WE1</Text>
+              <Text>Valid From: Oct 10 16:43:23 2024 GMT</Text>
+              <Text>Valid To: Jan 8 16:43:22 2025 GMT</Text>
+            </Box>
           ) : (
             'N/A'
           );
@@ -120,29 +124,46 @@ const CNAMERecords: React.FC<CNAMERecordsProps> = ({ domain, subdomains }) => {
       <Text bold color="blue">
         CNAME Records for {domain}
       </Text>
+      {/* Header */}
       <Box>
-        <Text bold>
-          {padString('Subdomain', COLUMN_WIDTHS.subdomain)} |{' '}
-          {padString('CNAME Record', COLUMN_WIDTHS.cname)} |{' '}
-          {padString('SSL Info', COLUMN_WIDTHS.ssl)}
-        </Text>
+        <Box width={COLUMN_WIDTHS.subdomain}>
+          <Text bold>Subdomain</Text>
+        </Box>
+        <Box width={COLUMN_WIDTHS.cname}>
+          <Text bold>CNAME Record</Text>
+        </Box>
+        <Box width={COLUMN_WIDTHS.ssl}>
+          <Text bold>SSL Info</Text>
+        </Box>
       </Box>
       {/* Divider */}
       <Box>
-        <Text>
-          {''.padEnd(COLUMN_WIDTHS.subdomain, '-')} +{'-'.repeat(3)}{' '}
-          {''.padEnd(COLUMN_WIDTHS.cname, '-')} +{'-'.repeat(3)}{' '}
-          {''.padEnd(COLUMN_WIDTHS.ssl, '-')}
-        </Text>
+        <Box width={COLUMN_WIDTHS.subdomain}>
+          <Text>{'-'.repeat(COLUMN_WIDTHS.subdomain)}</Text>
+        </Box>
+        <Box width={COLUMN_WIDTHS.cname}>
+          <Text>{'-'.repeat(COLUMN_WIDTHS.cname)}</Text>
+        </Box>
+        <Box width={COLUMN_WIDTHS.ssl}>
+          <Text>{'-'.repeat(COLUMN_WIDTHS.ssl)}</Text>
+        </Box>
       </Box>
       {/* Table Rows */}
       {tableData.map((row, index) => (
         <Box key={index}>
-          <Text>
-            {padString(row.Subdomain, COLUMN_WIDTHS.subdomain)} |{' '}
-            {padString(row['CNAME Record'], COLUMN_WIDTHS.cname)} |{' '}
-            {padString(row['SSL Info'], COLUMN_WIDTHS.ssl)}
-          </Text>
+          <Box width={COLUMN_WIDTHS.subdomain}>
+            <Text>{row.Subdomain}</Text>
+          </Box>
+          <Box width={COLUMN_WIDTHS.cname}>
+            <Text>{row['CNAME Record']}</Text>
+          </Box>
+          <Box width={COLUMN_WIDTHS.ssl}>
+            {typeof row['SSL Info'] === 'string' ? (
+              <Text>{row['SSL Info']}</Text>
+            ) : (
+              row['SSL Info']
+            )}
+          </Box>
         </Box>
       ))}
     </Box>

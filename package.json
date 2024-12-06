@@ -1,6 +1,6 @@
 {
   "name": "dig-everything",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "repository": {
     "type": "git",
     "url": "https://github.com/yourusername/dig-everything.git"
@@ -20,8 +20,7 @@
     "start": "bun src/index.tsx",
     "postbuild": "cp node_modules/yoga-wasm-web/dist/yoga.wasm dist",
     "build": "bun run ./build.ts && bun run postbuild",
-    "prod": "bun run build && bun ./dist/index.js",
-    "publish": "npm publish --access public"
+    "prod": "bun run build && bun ./dist/index.js"
   },
   "devDependencies": {
     "@types/node": "^22.10.1",
