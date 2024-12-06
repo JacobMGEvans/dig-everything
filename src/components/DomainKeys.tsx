@@ -54,7 +54,7 @@ const DomainKeys: React.FC<DomainKeysProps> = ({ domain }) => {
     <Box marginBottom={1} flexDirection="column">
       <Box marginBottom={1}>
         <Text bold color="blue">
-          Keys for {domain}
+          Key for {domain}
         </Text>
       </Box>
 
@@ -72,6 +72,13 @@ const DomainKeys: React.FC<DomainKeysProps> = ({ domain }) => {
         <Text bold>Decrypted:</Text>
         <Text>{decrypted}</Text>
       </Box>
+    </Box>
+  ) : typeof result === 'string' ? (
+    <Box marginBottom={1}>
+      <Text bold color="blue">
+        Key for {domain}
+      </Text>
+      <Text>{result}</Text>
     </Box>
   ) : null;
 };
