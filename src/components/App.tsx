@@ -7,7 +7,7 @@ import CNAMERecords from './CNAMERecords';
 // import SSLInfo from './SSLInfo';
 // import WhoisInfo from './WhoIsInfo';
 // import SPFRecord from './SPFRecords';
-// import DomainKeys from './DomainKeys';
+import DomainKeys from './DomainKeys';
 import enquirer from 'enquirer';
 
 export const subdomains = [
@@ -65,8 +65,9 @@ const App: React.FC = () => {
       {['A', 'AAAA', 'MX', 'NS', 'TXT', 'SOA', 'CAA'].map((recordType) => (
         <DNSRecords key={recordType} recordType={recordType} domain={domain} />
       ))}
+      <DomainKeys domain={domain} />
       {<CNAMERecords domain={domain} subdomains={subdomains} />}
-      {/* <DomainKeys domain={domain} /> 
+      {/* 
        <TraceDNSPath domain={domain} />
       <CheckDNSSEC domain={domain} />
       <SSLInfo domain={domain} />
