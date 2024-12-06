@@ -141,7 +141,7 @@ const CNAMERecords: React.FC<CNAMERecordsProps> = ({ domain, subdomains }) => {
           <Text>
             {padString(row.Subdomain, COLUMN_WIDTHS.subdomain)} |{' '}
             {padString(row['CNAME Record'], COLUMN_WIDTHS.cname)} |{' '}
-            {padString(row['SSL Info'], COLUMN_WIDTHS.ssl, 'right')}
+            {padString(row['SSL Info'], COLUMN_WIDTHS.ssl)}
           </Text>
         </Box>
       ))}
