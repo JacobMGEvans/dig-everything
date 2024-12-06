@@ -124,7 +124,7 @@ const CNAMERecords: React.FC<CNAMERecordsProps> = ({ domain, subdomains }) => {
       <Text bold color="blue">
         CNAME Records for {domain}
       </Text>
-      {/* Header */}
+      {/* The header for the table */}
       <Box>
         <Box width={COLUMN_WIDTHS.subdomain}>
           <Text bold>Subdomain</Text>
@@ -136,7 +136,7 @@ const CNAMERecords: React.FC<CNAMERecordsProps> = ({ domain, subdomains }) => {
           <Text bold>SSL Info</Text>
         </Box>
       </Box>
-      {/* Divider */}
+      {/* The divider for the table */}
       <Box>
         <Box width={COLUMN_WIDTHS.subdomain}>
           <Text>{'-'.repeat(COLUMN_WIDTHS.subdomain)}</Text>
@@ -148,7 +148,7 @@ const CNAMERecords: React.FC<CNAMERecordsProps> = ({ domain, subdomains }) => {
           <Text>{'-'.repeat(COLUMN_WIDTHS.ssl)}</Text>
         </Box>
       </Box>
-      {/* Table Rows */}
+      {/* The Data for the table */}
       {tableData.map((row, index) => (
         <Box key={index}>
           <Box width={COLUMN_WIDTHS.subdomain}>
