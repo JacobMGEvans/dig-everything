@@ -23,16 +23,16 @@ export const padString = (
   return align === 'left' ? str + padding : padding + str;
 };
 
-interface CNAMERecordsProps {
+type CNAMERecordsProps = {
   domain: string;
   subdomains: string[];
-}
+};
 
-interface TableRow {
+type TableRow = {
   Subdomain: string;
   'CNAME Record': string;
   'SSL Info': string | JSX.Element;
-}
+};
 
 const COLUMN_WIDTHS = {
   subdomain: 20,

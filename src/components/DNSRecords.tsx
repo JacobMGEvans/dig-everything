@@ -2,10 +2,10 @@ import React, { useState, useLayoutEffect } from 'react';
 import { Box, Text } from 'ink';
 import dns from 'node:dns/promises';
 
-interface DNSRecordsProps {
+type DNSRecordsProps = {
   recordType: string;
   domain: string;
-}
+};
 
 export function DNSRecords({ recordType, domain }: DNSRecordsProps) {
   const [currentRecords, setCurrentRecords] = useState<string[]>([]);

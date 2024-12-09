@@ -2,9 +2,9 @@ import React from 'react';
 import { Box, Text } from 'ink';
 import ora from 'ora';
 
-interface DomainKeysProps {
+type DomainKeysProps = {
   domain: string;
-}
+};
 
 const DomainKeys: React.FC<DomainKeysProps> = ({ domain }) => {
   const [result, setResult] = React.useState<

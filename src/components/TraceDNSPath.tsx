@@ -4,9 +4,9 @@ import { executeCommand } from '../utils/executeCommand';
 import { logResult } from '../utils/logger';
 import ora from 'ora';
 
-interface TraceDNSPathProps {
+type TraceDNSPathProps = {
   domain: string;
-}
+};
 
 const TraceDNSPath: React.FC<TraceDNSPathProps> = ({ domain }) => {
   React.useLayoutEffect(() => {

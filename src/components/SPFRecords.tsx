@@ -4,9 +4,9 @@ import { executeCommand } from '../utils/executeCommand';
 import { logResult } from '../utils/logger';
 import ora from 'ora';
 
-interface SPFRecordProps {
+type SPFRecordProps = {
   domain: string;
-}
+};
 
 const SPFRecord: React.FC<SPFRecordProps> = ({ domain }) => {
   React.useLayoutEffect(() => {

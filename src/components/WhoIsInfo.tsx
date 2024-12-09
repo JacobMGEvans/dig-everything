@@ -4,9 +4,9 @@ import { executeCommand } from '../utils/executeCommand';
 import { logResult } from '../utils/logger';
 import ora from 'ora';
 
-interface WhoisInfoProps {
+type WhoisInfoProps = {
   domain: string;
-}
+};
 
 const WhoisInfo: React.FC<WhoisInfoProps> = ({ domain }) => {
   React.useLayoutEffect(() => {

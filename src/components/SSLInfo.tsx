@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Text } from 'ink';
 import tls from 'tls';
 
-interface SSLInfoProps {
+type SSLInfoProps = {
   domain: string;
-}
+};
 
 export function SSLInfo({ domain }: SSLInfoProps) {
   const [result, setResult] = useState('');

@@ -4,11 +4,11 @@ import { executeCommand } from '../utils/executeCommand';
 import { logResult } from '../utils/logger';
 import ora from 'ora';
 
-interface CheckDNSSECProps {
+type CheckDNSSECProps = {
   domain: string;
-}
+};
 
-const CheckDNSSEC: React.FC<CheckDNSSECProps> = ({ domain }) => {
+export function CheckDNSSEC({ domain }: CheckDNSSECProps) {
   React.useLayoutEffect(() => {
     const spinner = ora(`Checking DNSSEC for ${domain}`).start();
     const result = executeCommand(`dig +dnssec +short ${domain}`);
@@ -23,6 +23,4 @@ const CheckDNSSEC: React.FC<CheckDNSSECProps> = ({ domain }) => {
       </Text>
     </Box>
   );
-};
-
-export default CheckDNSSEC;
+}
