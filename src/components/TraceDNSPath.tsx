@@ -1,7 +1,6 @@
 import React from 'react';
 import { Box, Text } from 'ink';
 import { executeCommand } from '../utils/executeCommand';
-import { logResult } from '../utils/logger';
 import ora from 'ora';
 
 type TraceDNSPathProps = {
@@ -21,8 +20,6 @@ export function TraceDNSPath({ domain }: TraceDNSPathProps) {
       )
       .map((line: string) => line.trim())
       .join('\n');
-
-    logResult(`Trace summary for ${domain}`, summary);
   }, []);
 
   return (

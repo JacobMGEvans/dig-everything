@@ -1,7 +1,6 @@
 import React from 'react';
 import { Box, Text } from 'ink';
 import { executeCommand } from '../utils/executeCommand';
-import { logResult } from '../utils/logger';
 import ora from 'ora';
 
 type SPFRecordProps = {
@@ -13,7 +12,6 @@ export function SPFRecord({ domain }: SPFRecordProps) {
     const spinner = ora(`Checking SPF record for ${domain}`).start();
     const result = executeCommand(`dig +short ${domain} TXT | grep "v=spf1"`);
     spinner.succeed(`Checked SPF record for ${domain}`);
-    logResult(`SPF record for ${domain}`, result);
   }, []);
 
   return (
