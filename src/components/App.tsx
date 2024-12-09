@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Box, Text, useApp, useInput } from 'ink';
 import { DNSRecords } from './DNSRecords';
 import { CNAMERecords } from './CNAMERecords';
 import { SSLInfo } from './SSLInfo';
+import { DomainKeys } from './DomainKeys';
 // import TraceDNSPath from './TraceDNSPath';
 // import CheckDNSSEC from './CheckDNSSEC';
 // import WhoisInfo from './WhoIsInfo';
 // import SPFRecord from './SPFRecords';
-import DomainKeys from './DomainKeys';
 import enquirer from 'enquirer';
 
 export const subdomains = [
@@ -23,11 +23,11 @@ export const COLUMN_WIDTHS = {
   row2: 50,
 };
 
-const App: React.FC = () => {
+export function App() {
   const { exit } = useApp();
   const [domain, setDomain] = useState<string>('');
 
-  React.useMemo(() => {
+  useMemo(() => {
     (async () => {
       await enquirer
         .prompt<{ domain: string }>({
@@ -81,6 +81,4 @@ const App: React.FC = () => {
       </Box>
     </Box>
   );
-};
-
-export default App;
+}

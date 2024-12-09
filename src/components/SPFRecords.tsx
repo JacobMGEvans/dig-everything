@@ -8,7 +8,7 @@ type SPFRecordProps = {
   domain: string;
 };
 
-const SPFRecord: React.FC<SPFRecordProps> = ({ domain }) => {
+export function SPFRecord({ domain }: SPFRecordProps) {
   React.useLayoutEffect(() => {
     const spinner = ora(`Checking SPF record for ${domain}`).start();
     const result = executeCommand(`dig +short ${domain} TXT | grep "v=spf1"`);
@@ -23,6 +23,4 @@ const SPFRecord: React.FC<SPFRecordProps> = ({ domain }) => {
       </Text>
     </Box>
   );
-};
-
-export default SPFRecord;
+}

@@ -8,7 +8,7 @@ type WhoisInfoProps = {
   domain: string;
 };
 
-const WhoisInfo: React.FC<WhoisInfoProps> = ({ domain }) => {
+export function WhoisInfo({ domain }: WhoisInfoProps) {
   React.useLayoutEffect(() => {
     const spinner = ora(`Fetching WHOIS information for ${domain}`).start();
     const result = executeCommand(`whois ${domain}`);
@@ -23,6 +23,4 @@ const WhoisInfo: React.FC<WhoisInfoProps> = ({ domain }) => {
       </Text>
     </Box>
   );
-};
-
-export default WhoisInfo;
+}

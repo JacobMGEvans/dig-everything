@@ -8,7 +8,7 @@ type TraceDNSPathProps = {
   domain: string;
 };
 
-const TraceDNSPath: React.FC<TraceDNSPathProps> = ({ domain }) => {
+export function TraceDNSPath({ domain }: TraceDNSPathProps) {
   React.useLayoutEffect(() => {
     const spinner = ora(`Tracing DNS path for ${domain}`).start();
     const result = executeCommand(`dig +trace ${domain}`);
@@ -32,6 +32,4 @@ const TraceDNSPath: React.FC<TraceDNSPathProps> = ({ domain }) => {
       </Text>
     </Box>
   );
-};
-
-export default TraceDNSPath;
+}

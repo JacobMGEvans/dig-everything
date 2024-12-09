@@ -6,7 +6,7 @@ type DomainKeysProps = {
   domain: string;
 };
 
-const DomainKeys: React.FC<DomainKeysProps> = ({ domain }) => {
+export function DomainKeys({ domain }: DomainKeysProps) {
   const [result, setResult] = React.useState<
     | string
     | { publishableKey: string; clerkKeyPrefix: string; encodedDomain: string }
@@ -81,6 +81,4 @@ const DomainKeys: React.FC<DomainKeysProps> = ({ domain }) => {
       <Text>{result}</Text>
     </Box>
   ) : null;
-};
-
-export default DomainKeys;
+}
