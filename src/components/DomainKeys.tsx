@@ -24,7 +24,6 @@ export function DomainKeys({ domain }: DomainKeysProps) {
       const website = await result.text();
       const clerkKeyRegex = /\bpk_(?:live|test)_[a-zA-Z0-9.=]{28,}\b/g;
       const publishableKey = website.match(clerkKeyRegex)?.at(0)?.trim();
-      console.log('PUBLISHABLE KEY', publishableKey);
 
       if (!publishableKey) {
         setResult(`No publishable key found`);
