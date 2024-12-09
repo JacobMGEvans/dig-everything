@@ -2,14 +2,13 @@ import React, { JSX } from 'react';
 import { Box, Text } from 'ink';
 import dns from 'node:dns/promises';
 import ora from 'ora';
-import SSLInfo from './SSLInfo';
+import { SSLInfo } from './SSLInfo';
 
 export const padString = (
   str: string | JSX.Element,
   length: number,
   align: 'left' | 'right' = 'left'
 ) => {
-  // Check if the str is a JSX.Element and return it directly
   if (typeof str === 'object' && typeof str !== 'string') {
     return str;
   }
@@ -29,7 +28,6 @@ interface CNAMERecordsProps {
   subdomains: string[];
 }
 
-// Add an index signature to allow dynamic keys
 interface TableRow {
   Subdomain: string;
   'CNAME Record': string;
@@ -42,7 +40,7 @@ const COLUMN_WIDTHS = {
   ssl: 60,
 };
 
-const CNAMERecords: React.FC<CNAMERecordsProps> = ({ domain, subdomains }) => {
+export function CNAMERecords({ domain, subdomains }: CNAMERecordsProps) {
   const [tableData, setTableData] = React.useState<TableRow[]>([]);
   const [loading, setLoading] = React.useState<boolean>(true);
   const [error, setError] = React.useState<string | null>(null);
@@ -162,6 +160,4 @@ const CNAMERecords: React.FC<CNAMERecordsProps> = ({ domain, subdomains }) => {
       ))}
     </Box>
   );
-};
-
-export default CNAMERecords;
+}

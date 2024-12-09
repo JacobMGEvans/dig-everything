@@ -7,7 +7,7 @@ interface DNSRecordsProps {
   domain: string;
 }
 
-const DNSRecords: React.FC<DNSRecordsProps> = ({ recordType, domain }) => {
+export function DNSRecords({ recordType, domain }: DNSRecordsProps) {
   const [currentRecords, setCurrentRecords] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -23,18 +23,18 @@ const DNSRecords: React.FC<DNSRecordsProps> = ({ recordType, domain }) => {
   }
 
   useLayoutEffect(() => {
-    const fetchRecords = async () => {
+    (async () => {
       try {
         setLoading(true);
         let records: string[] = [];
 
         switch (recordType.toUpperCase()) {
           case 'A':
-            records = await dns.resolve4(domain); // IPv4 addresses
+            records = await dns.resolve4(domain);
             setCurrentRecords(records);
             break;
           case 'AAAA':
-            records = await dns.resolve6(domain); // IPv6 addresses
+            records = await dns.resolve6(domain);
             setCurrentRecords(records);
             break;
           case 'CNAME':
@@ -48,7 +48,7 @@ const DNSRecords: React.FC<DNSRecordsProps> = ({ recordType, domain }) => {
             setCurrentRecords(records);
             break;
           case 'NS':
-            records = await dns.resolveNs(domain); // Name servers
+            records = await dns.resolveNs(domain);
             setCurrentRecords(records);
             break;
           case 'TXT':
@@ -94,10 +94,8 @@ const DNSRecords: React.FC<DNSRecordsProps> = ({ recordType, domain }) => {
       } finally {
         setLoading(false);
       }
-    };
-
-    fetchRecords();
-  }, [domain, recordType]);
+    })();
+  }, []);
 
   return (
     <Box marginBottom={1} flexDirection="column">
@@ -117,6 +115,4 @@ const DNSRecords: React.FC<DNSRecordsProps> = ({ recordType, domain }) => {
       )}
     </Box>
   );
-};
-
-export default DNSRecords;
+}

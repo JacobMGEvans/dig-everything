@@ -1,10 +1,10 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { Box, Text, useApp, useInput } from 'ink';
-import DNSRecords from './DNSRecords';
-import CNAMERecords from './CNAMERecords';
+import { DNSRecords } from './DNSRecords';
+import { CNAMERecords } from './CNAMERecords';
+import { SSLInfo } from './SSLInfo';
 // import TraceDNSPath from './TraceDNSPath';
 // import CheckDNSSEC from './CheckDNSSEC';
-// import SSLInfo from './SSLInfo';
 // import WhoisInfo from './WhoIsInfo';
 // import SPFRecord from './SPFRecords';
 import DomainKeys from './DomainKeys';
@@ -27,19 +27,20 @@ const App: React.FC = () => {
   const { exit } = useApp();
   const [domain, setDomain] = useState<string>('');
 
-  const promptDomain = useCallback(async () => {
-    await enquirer
-      .prompt<{ domain: string }>({
-        type: 'input',
-        name: 'domain',
-        message: 'Enter the domain to analyze:',
-        validate: (value) => (value ? true : 'Domain cannot be empty.'),
-      })
-      .then((response) => {
-        setDomain(response.domain);
-      });
+  React.useMemo(() => {
+    (async () => {
+      await enquirer
+        .prompt<{ domain: string }>({
+          type: 'input',
+          name: 'domain',
+          message: 'Enter the domain to analyze:',
+          validate: (value) => (value ? true : 'Domain cannot be empty.'),
+        })
+        .then((response) => {
+          setDomain(response.domain);
+        });
+    })();
   }, []);
-  promptDomain();
 
   useInput((input, key) => {
     if ((key.ctrl && input === 'c') || key.escape) {
@@ -67,10 +68,10 @@ const App: React.FC = () => {
       ))}
       <DomainKeys domain={domain} />
       {<CNAMERecords domain={domain} subdomains={subdomains} />}
+      <SSLInfo domain={domain} />
       {/* 
        <TraceDNSPath domain={domain} />
       <CheckDNSSEC domain={domain} />
-      <SSLInfo domain={domain} />
       <WhoisInfo domain={domain} />
       <SPFRecord domain={domain} /> */}
       <Box marginTop={1}>

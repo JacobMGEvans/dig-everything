@@ -6,7 +6,7 @@ interface SSLInfoProps {
   domain: string;
 }
 
-const SSLInfo: React.FC<SSLInfoProps> = ({ domain }) => {
+export function SSLInfo({ domain }: SSLInfoProps) {
   const [result, setResult] = useState('');
 
   useEffect(() => {
@@ -40,6 +40,4 @@ const SSLInfo: React.FC<SSLInfoProps> = ({ domain }) => {
   }, []);
 
   return <Text>{result}</Text>;
-};
-
-export default SSLInfo;
+}
