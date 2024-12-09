@@ -3,6 +3,6 @@ await Bun.build({
   minify: true,
   outdir: 'dist',
   target: 'bun',
-  sourcemap: 'external',
+  sourcemap: 'linked',
 }).catch(() => process.exit(1));
 export {};

@@ -18,15 +18,16 @@
   },
   "scripts": {
     "start": "bun src/index.tsx",
+    "clean": "rm -rf dist",
     "postbuild": "cp node_modules/yoga-wasm-web/dist/yoga.wasm dist",
-    "build": "bun run ./build.ts && bun run postbuild",
+    "build": "bun run clean && bun run ./build.ts && bun run postbuild",
     "prod": "bun run build && bun ./dist/index.js"
   },
   "devDependencies": {
+    "@types/bun": "^1.1.14",
     "@types/node": "^22.10.1",
-    "typescript": "^5.7.2",
     "@types/react": "^18.2.0",
-    "@types/bun": "^1.1.14"
+    "typescript": "^5.7.2"
   },
   "dependencies": {
     "bun": "^1.1.38",
