@@ -68,14 +68,8 @@ const CNAMERecords: React.FC<CNAMERecordsProps> = ({ domain, subdomains }) => {
             cname = 'No CNAME Record';
           }
 
-          // Simulate SSL Info (can be replaced with a proper function)
           const ssl = ['clerk', 'accounts'].includes(sub) ? (
-            <Box flexDirection="column">
-              <Text>Subject: accounts.clerk.com</Text>
-              <Text>Issuer: WE1</Text>
-              <Text>Valid From: Oct 10 16:43:23 2024 GMT</Text>
-              <Text>Valid To: Jan 8 16:43:22 2025 GMT</Text>
-            </Box>
+            <SSLInfo domain={sub + '.' + domain} />
           ) : (
             'N/A'
           );
